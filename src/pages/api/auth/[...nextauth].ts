@@ -15,8 +15,44 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async session({ session }: any) {
+      try {
+
+        const userActiveSubscription = await fauna.query((
+          q.Get(
+            q.Intersection([
+              q.Match(
+                q.Index("subscription_by_user_ref"),
+                q.Select(
+                  "ref",
+                  q.Get(
+                    q.Match(
+                      q.Index("user_by_email"),
+                      q.Casefold(session.user.email)
+                    )
+                  )
+                )
+              ),
+              q.Match(
+                q.Index("subscription_by_status"),
+                q.Casefold("active")
+              )
+            ])
+          )
+        )).catch(err => console.log('errinho fela da mae => ' + err))
+        
+        return {
+          ...session,
+          activeSubscription: userActiveSubscription
+        };
+      } catch (err) {
+        return {
+          ...session,
+          activeSubscription: 'failed'
+        }
+      }
+    },
     async signIn(user: any) {
       const { email } = user.user;
 
