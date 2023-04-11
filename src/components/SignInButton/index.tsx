@@ -4,9 +4,9 @@ import { FaGithub } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 
 export function SignInButton() {
-  const { data: session } = useSession();
+  const {data: session} = useSession();
 
-  return session ? (
+  return session?.user ? (
     <button type="button" className={styles.signInButton} onClick={() => signOut()}>
       <FaGithub color="#04d361" />
       {session?.user?.name}

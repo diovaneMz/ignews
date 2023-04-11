@@ -59,6 +59,10 @@
     font-weight: bold;
     margin: 4rem 0 2rem;
 
+    & > p {
+      display: inline;
+    }
+
     & > a {
       color: var(--yellow-500);
       margin-left: .5rem;

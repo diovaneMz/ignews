@@ -1,6 +1,6 @@
-import { getPrismicClient } from "@/services/prismic";
-import { GetServerSideProps, GetStaticProps } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { getPrismicClient } from "../../../services/prismic";
+import { GetStaticProps } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -18,10 +18,8 @@ interface PostPreviewProps {
 }
 
 export default function PostPreview({ post }: PostPreviewProps) {
-  const { data: session }: any = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
-
-  console.log(session)
 
   useEffect(() => {
     if (session?.activeSubscription) {
@@ -44,7 +42,9 @@ export default function PostPreview({ post }: PostPreviewProps) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
           <div className={styles.continueReading}>
-            Wanna continue reading?
+            <p>
+              Wanna continue reading?
+            </p>
             <Link href="/">Subscribe now 🤗</Link>`
           </div>
         </article>
